@@ -10,11 +10,10 @@
 	"name": "AntiTear Unlock FPS",
 	"version": "v1.0.0",
 	"developer": "AntiTear",
-	"description": "Triet tieu 100% soc nhieu man hinh (Screen Tearing) khi bat Unlock FPS trong GD 2.2081 ma khong gay lag.",
+	"description": "Tu dong khu sọc nhieu man hinh khi bat Unlock FPS trong GD 2.2081.",
 	"early-load": true,
 	"tags": [
 		"performance",
-		"enhancement",
-		"universal"
+		"enhancement"
 	]
 }
