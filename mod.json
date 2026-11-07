@@ -1,0 +1,20 @@
+{
+	"geode": "4.3.1",
+	"gd": {
+		"win": "*",
+		"android": "*",
+		"mac": "*",
+		"ios": "*"
+	},
+	"id": "antitear.fpsfix",
+	"name": "AntiTear Unlock FPS",
+	"version": "v1.0.0",
+	"developer": "AntiTear",
+	"description": "Triet tieu 100% soc nhieu man hinh (Screen Tearing) khi bat Unlock FPS trong GD 2.2081 ma khong gay lag.",
+	"early-load": true,
+	"tags": [
+		"performance",
+		"enhancement",
+		"universal"
+	]
+}
