@@ -14,65 +14,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Prepare Logo and Sync Latest Geode SDK Version
-        shell: python
-        run: |
-          import json, os, struct, zlib, urllib.request
-
-          # 1. Tự động lấy phiên bản Geode SDK mới nhất trên GitHub để không bao giờ lỗi Outdated
-          latest_ver = "4.3.1"
-          try:
-              req = urllib.request.Request(
-                  "https://api.github.com/repos/geode-sdk/geode/releases/latest",
-                  headers={"User-Agent": "AntiTear-Builder"}
-              )
-              with urllib.request.urlopen(req, timeout=10) as resp:
-                  data = json.loads(resp.read().decode("utf-8"))
-                  tag = data.get("tag_name", "").lstrip("v")
-                  if tag:
-                      latest_ver = tag
-          except Exception as e:
-              print("Using fallback Geode version:", e)
-
-          with open("mod.json", "r", encoding="utf-8") as f:
-              mod_data = json.load(f)
-          mod_data["geode"] = latest_ver
-          with open("mod.json", "w", encoding="utf-8") as f:
-              json.dump(mod_data, f, indent=4)
-          print(f"Synced mod.json to Geode SDK v{latest_ver}")
-
-          # 2. Tự động tạo logo.png (256x256) nếu trong repo chưa có
-          if not os.path.exists("logo.png"):
-              size = 256
-              raw = bytearray()
-              cx, cy = size / 2.0, size / 2.0
-              for y in range(size):
-                  raw.append(0)
-                  for x in range(size):
-                      dx, dy = x - cx, y - cy
-                      dist = (dx*dx + dy*dy) ** 0.5
-                      r = int(14 + (y / size) * 16)
-                      g = int(20 + (y / size) * 26)
-                      b = int(38 + (y / size) * 42)
-                      if abs(dist - 88) < 5.0:
-                          r, g, b = 0, 240, 255
-                      elif abs(dy) < 7 and abs(dx) < 64:
-                          r, g, b = 0, 255, 170
-                      elif (14 < abs(dy) < 36) and abs(dx) < 48:
-                          r, g, b = 56, 189, 248
-                      raw.extend((r, g, b, 255))
-
-              def chunk(t, d):
-                  c = t + d
-                  return struct.pack("!I", len(d)) + c + struct.pack("!I", zlib.crc32(c) & 0xffffffff)
-
-              with open("logo.png", "wb") as f:
-                  f.write(b"\x89PNG\r\n\x1a\n")
-                  f.write(chunk(b"IHDR", struct.pack("!IIBBBBB", size, size, 8, 6, 0, 0, 0)))
-                  f.write(chunk(b"IDAT", zlib.compress(bytes(raw), 9)))
-                  f.write(chunk(b"IEND", b""))
-              print("Generated logo.png successfully.")
-
       - name: Build Geode Mod
         uses: geode-sdk/build-geode-mod@main
         with:
@@ -82,6 +23,6 @@ jobs:
       - name: Upload Built .geode File
         uses: actions/upload-artifact@v4
         with:
-          name: antitear.fpsfix.geode
-          path: "**/*.geode"
+          name: antitear.fpsfix
+          path: build/**/*.geode
           if-no-files-found: error
